@@ -1,34 +1,48 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
-
+/**
+ * Controlador central de la aplicacion.
+ */
 class Entrada extends CI_Controller {
-
+    /**
+     * Esta funcion carga la vista principal y el helper url
+     */
     public function index() {
         $this->load->helper('url');
         $this->load->view('Index');
         
         
     }
+    /*
+     * Controlador que invoca el formulario para importar Xml a nuestra base de datos
+     */
     public function Importar(){
         
         $this->load->helper('url');
-        $cuerpo = $this->load->view('FicheroImportarXml', true);
+        $cuerpo = $this->load->view('FicheroImportarXml','', true);
         $this->load->view('Index', Array('cuerpo' => $cuerpo));
     }
-
+    /**
+     * Carga categorias y las muestra en el cuerpo de la vista
+     * utilizando el modelo tienda.
+     */
     public function Categorias() {
         
         $this->load->helper('url');
         $this->load->model('Model_tienda', "tienda");
-
+        //llamamos a la funcion traer categorias para obtener todas las categorias de productos.0
         $categorias = $this->tienda->Traer_categorias();
-        
+        //Cargamos la vista en el cuerpo de la aplicacion.
         $cuerpo = $this->load->view('Categorias_view', Array('Categorias' => $categorias), true);
         
         $this->load->view('Index', Array('cuerpo' => $cuerpo));
         
     }
+    /**
+     * Cargamos los productos destacados y los mostramos en el cuerpo de la aplicacion.
+     */
+    
     public function Destacados(){
          
         $this->load->helper('url');
@@ -42,6 +56,10 @@ class Entrada extends CI_Controller {
         $this->load->view('Index', Array('cuerpo' => $cuerpo));
         
     }
+    /**
+     * Cargamos los productos de una categoria en concreto y los cargamos en el cuerpo de la vista.
+     * @param type $categoria id para obtener los productos de la categoria.
+     */
     public function ver_categoria($categoria){
         
         $this->load->helper('url');
@@ -53,10 +71,15 @@ class Entrada extends CI_Controller {
         
         $this->load->view('Index', Array('cuerpo' => $cuerpo));
     }
+    /**
+     * obtenemos los detalles de todos los datos de un producto y los mostramos en el cuerpo de la aplicacion.
+     * @param type $id del producto para obtener todos sus datos.
+     * Controlaños el añadir al carrito una vez mostrado el producto.
+     */
     public function detalles_producto($id){
         $this->load->helper('url');
         $this->load->model('Model_tienda', "tienda");
-        
+        //si hay carrito lo añadimos si no lo mostramos.
         if(!$_POST){
             $detalles=$this->tienda->Traer_productos("Codigo",$id);
             $cuerpo = $this->load->view('Detallado_view', Array('detalles' => $detalles), true);
@@ -82,7 +105,7 @@ class Entrada extends CI_Controller {
                  'cantidad'=>$cant,
                  'precio'=>$pre
              );
-             
+             //añadimos al carrito  y mostramos el carrito.
              $this->AñadirCarrito($producto);
              $this->MostrarCarrito();
              
@@ -91,12 +114,19 @@ class Entrada extends CI_Controller {
         }
         
     }
+    /**
+     * Añade un producto al carrito.
+     * @param type $producto que añadimos al carrito (array)
+     */
     public function AñadirCarrito($producto){
         
         $this->load->library('carrito');
         $this->carrito->add($producto);
         
     }
+    /**
+     * Muestra los productos del carrito
+     */
     public function MostrarCarrito(){
         $this->load->helper('url');
         $this->load->library('carrito');
@@ -104,7 +134,7 @@ class Entrada extends CI_Controller {
         $productoFinal=Array();
         //traemos todos los productos del carrito
         $productos=$this->carrito->get_content();
-        
+        //recorremos los productos del carrito y los indexamos para pasarlos a la vista.
         foreach ($productos as $idx=>$producto){
             //Completamos todos los campos a sacar(Nombre,Categoria);
             
@@ -115,7 +145,9 @@ class Entrada extends CI_Controller {
         print_r($productos);
         echo "</pre>";
         */
+        //metemos en la session los productos del carrito.
         $_SESSION['ElementosSeleccionados']=$productos;
+        //pasamos el total que en principio sera 0
         $total=0;
         $cuerpo = $this->load->view('Mostrar_carrito', Array('productos' => $productos, 'total'=> $total), true);
         $this->load->view('Index', Array('cuerpo' => $cuerpo));
@@ -123,6 +155,10 @@ class Entrada extends CI_Controller {
         
         
     }
+    /**
+     * Eliminamos un producto del carrito.
+     * @param type $id para eliminar el producto del carrito
+     */
     public function BorrarProductoCarrito($id){
          $this->load->helper('url');
          $this->load->library('carrito');
@@ -139,6 +175,9 @@ class Entrada extends CI_Controller {
         }
         
     }
+    /**
+     * eliminamos todos los elementos del carrito.
+     */
     public function Vaciar_carrito(){
         $this->load->helper('url');
         $this->load->library('carrito');
@@ -146,12 +185,15 @@ class Entrada extends CI_Controller {
         redirect("","location",301);
   
     }
+    /**
+     * Ejecutamos al compra, si el usuario es correcto.
+     */
     public function Comprar(){
         $this->load->helper('url');
         $this->load->library('carrito');
         
          if(!isset($_SESSION['usuario_correcto']) || $_SESSION['usuario_correcto']==FALSE){
-             
+             //activamos comprando para volver al sitio de compra una vez el usuario se haya registrado.
             $_SESSION['comprando']=true;
             redirect("/Login/verificar","location",301);
              
@@ -171,6 +213,11 @@ class Entrada extends CI_Controller {
          }
         
     }
+    /**
+     * Finalizamos la compra, eliminamos la cantidad del stock de cada producto
+     * Insertamos el pedido en la bd, y sus lineas de pedido.
+     * Imprimimos el pdf y lo enviamos al correo.
+     */
     public function Finalizar_compra(){
         
         $this->load->helper('url');
@@ -179,7 +226,7 @@ class Entrada extends CI_Controller {
          
         
             $codigo=$this->tienda->ObtenerCodigo($_SESSION['usuario']['Nombre_usuario']);
-            print_r( $codigo);
+//            print_r( $codigo);
         $datosPedido=Array('fecha'=>date('Y-m-d'),
                            'Estado'=>"NP",
                            'Compradores_Codigo'=>$codigo);
@@ -200,7 +247,7 @@ class Entrada extends CI_Controller {
                     'Importe'=>$producto['total'],
                     'Pedidos_codigo_pedido'=>$cod_pedido,
             );
-            
+            //Comprobamos que no se supere el stock
            $stock=$this->tienda->TraerStock($producto['id']);
           
           
@@ -214,7 +261,7 @@ class Entrada extends CI_Controller {
              print_r($lineapedido);
             echo"</pre>";
              */
-             
+             //insertamos la linea de pedido.
             $this->tienda->NuevaLineaPedido($lineapedido);
            }
            else
@@ -243,13 +290,16 @@ class Entrada extends CI_Controller {
         }
         
     }
+    /**
+     * Consultamos los pedidos del usuario registrado.
+     */
     public function Verpedidos(){
         $this->load->helper('url');
         $this->load->model('Model_tienda', "tienda");
         $codigo=$_SESSION['usuario']['Codigo'];
         $numeroPedidos=$this->tienda->ContarPedidos($codigo);
         $mispedidos=$this->tienda->Mispedidos($codigo);
-          
+          //indexamos los pedidos para mandarlos a la vista.
         foreach($mispedidos as $idx=>$pedido){
           
           $mispedidos[$idx]['lineas']=$this->tienda->TraerLineasPedido($mispedidos[$idx]['codigo_pedido']);
@@ -263,6 +313,10 @@ class Entrada extends CI_Controller {
         $cuerpo= $this->load->view('Mostrar_mispedidos',Array('mispedidos'=>$mispedidos,'total'=> $total="","numeroPedido"=>$numeroPedidos), true);
         $this->load->view('Index', Array('cuerpo' => $cuerpo)); 
     }
+    /**
+     * Cancelamos el pedido siempre que no este ya enviado.
+     * @param type $idpedido para poder cancelarlo siempre que sea NP
+     */
     public function CancelarPedido($idpedido){
         $this->load->helper('url');
         $this->load->model('Model_tienda', "tienda");
@@ -272,6 +326,10 @@ class Entrada extends CI_Controller {
         $this->Verpedidos();
         
     }
+    /**
+     *  Imprimime pedidos en pdf
+     * @param type $idpedido identificador del pedido para impresion
+     */
     public function ImprimirPedidoPDE($idpedido){
         $this->load->library('Pdf');
         $this->load->model('Model_tienda', "tienda");
@@ -288,9 +346,10 @@ class Entrada extends CI_Controller {
         $this->pdf->ImprimirPdf($pedidoCompleto);
         
     }
-    
     /**
-     * Enviar correo con el pdf.
+     *  Enviamos por correo un pedido despues de haber realizado la compra.
+     * @param type $codigopedido pedido que vamos a enviar por correo.
+     * @param type $mail direccion de correo al cual enviamos el mail
      */
     public function EnviaCorreo($codigopedido,$mail)
 	{

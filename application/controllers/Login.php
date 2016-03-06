@@ -2,7 +2,10 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
-
+/**
+ * Controlador de usuarios , el cual llevara toda la parte referente
+ *  a la identificacion y verificacion de los usuarios
+ */
 class Login extends CI_Controller {
 
     public function index() {
@@ -11,6 +14,10 @@ class Login extends CI_Controller {
         $cuerpo=$this->load->view('Identificar_view','',true);
         $this->load->view('Index', Array('cuerpo' => $cuerpo));
     }
+    /**
+     * Verificamos si un usuario es correcto si lo es le damos al bienvenida
+     * sino sacamos error.
+     */
     public function verificar(){
         
             $this->load->helper('url');
@@ -70,15 +77,18 @@ class Login extends CI_Controller {
      
   
     }
-
+/**
+ * Recogemos los datos de los nuevos usuarios que se vayan a registrar en nuestra aplicacion,
+ * o de los usuarios que vayan a modificar su perfil.
+ */
     public function RecogerDatosUser(){
         
          $this->load->helper('url');
          $this->load->library('form_validation');      
          $this->load->model('Model_tienda', "tienda");//modelo de la aplicacion.
-            echo "<pre>";
-            print_r($_SESSION);
-            echo "</pre>";
+//            echo "<pre>";
+//            print_r($_SESSION);
+//            echo "</pre>";
             //Reglas
                 $this->form_validation->set_rules('user','user', 'required');
                 if(!isset($_SESSION['modificando'])|| $_SESSION['modificando']==false){
@@ -164,7 +174,7 @@ class Login extends CI_Controller {
                         'CP'=>$CP,
                         'Provincias'=>$provincia 
                    );
-                    print_r($_SESSION['usuario']);
+//                    print_r($_SESSION['usuario']);
                     $this->tienda->ModificarUser($_SESSION['usuario']['Nombre'],$datos);
                     $_SESSION['usuario_correcto']=true;
                     $_SESSION['usuario']=$datos;
@@ -178,6 +188,9 @@ class Login extends CI_Controller {
                 
                 $_SESSION['modificando']=false;
     }
+    /**
+     * El usuario sale de la aplicacion y borramos todos sus datos de session.
+     */
     public function Salir(){
         $this->load->helper('url');
         
@@ -191,6 +204,10 @@ class Login extends CI_Controller {
         redirect("","location",301);
          
     }
+    /**
+     * Esta funcion direcciona al formulario de modificacion ,
+     * que sera el mismo que de inserccion, pero con modificaciones
+     */
    public function ModificarUsuario(){
        
        $_SESSION['modificando']=true;

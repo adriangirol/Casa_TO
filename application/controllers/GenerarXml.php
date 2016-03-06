@@ -49,7 +49,7 @@ class GenerarXml extends CI_Controller {
 
     public function Procesa() {
 
-        $archivo = $_FILES['file'];
+        $archivo = $_FILES['mifile'];
 
         if (file_exists($archivo['tmp_name'])) {
             $contentXML = utf8_encode(file_get_contents($archivo['tmp_name']));
@@ -72,7 +72,7 @@ class GenerarXml extends CI_Controller {
             $micategoria['Codigo'] = (string) $micategoriaegoria->Codigo;
             $micategoria['Nombre'] = (string) $micategoriaegoria->Nombre;
             $micategoria['Descripcion'] = (string) $micategoriaegoria->Descripcion;
-            //falta por añadir la categoria
+           
             $micategoriaegoria_id = $this->tienda->AñadirCategoria($micategoria);
 
             foreach ($micategoriaegoria->articulos->articulo as $articulo) {
@@ -91,8 +91,8 @@ class GenerarXml extends CI_Controller {
                 $miproducto['Fecha_ini_destacado'] = (string) $articulo->fechacom;
                 $miproducto['Fecha_fin_destacado'] = (string) $articulo->fechafin;
                 $miproducto['Oculto'] = (string) $articulo->oculto;
-                //Falta por implementar la inserccion
-                $this->tienda->AñadeProducto($miproducto);
+                
+                $this->tienda->AñadirProducto($miproducto);
             }
         }
     }
