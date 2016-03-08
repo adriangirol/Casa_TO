@@ -9,6 +9,7 @@ class GenerarXml extends CI_Controller {
 
     public function exportar() {
         $this->load->model('Model_tienda', "tienda");
+        
 
         $micategoriaegorias = $this->tienda->Extraer('SELECT * FROM categorias');
        
@@ -48,16 +49,16 @@ class GenerarXml extends CI_Controller {
     }
 
     public function Procesa() {
-        
+        $this->load->helper('url');
         $archivo = $_FILES['mifile'];  
         if (file_exists($archivo['tmp_name'])) {
             $contentXML = utf8_encode(file_get_contents($archivo['tmp_name']));
-            $xml = simplexml_load_string($contentXML);
-
+            $xml = simplexml_load_string($contentXML);     
             $this->InsertaXML($xml);
-            
-            $cuerpo = $this->load->view('ImportandoXml', true);
-            $this->load->view('Index', Array('cuerpo' => $cuerpo));
+           
+           $cuerpo = $this->load->view('ImportandoXml','', true);
+           $this->load->view('Index', Array('cuerpo' => $cuerpo));
+
         } else {
             
             $cuerpo = $this->load->view('Error_importar', true);
@@ -66,7 +67,7 @@ class GenerarXml extends CI_Controller {
        
     }
      function InsertaXML($xml) {
-         
+         $this->load->helper('url');
         $this->load->model('Model_tienda', "tienda");
         foreach ($xml as $micategoria) {
 
@@ -88,11 +89,13 @@ class GenerarXml extends CI_Controller {
                 $miproducto['Destacado'] = (string) $articulo->Destacado;
                 
                 $this->tienda->AñadirProducto($miproducto);
+               
                 
-            $cuerpo = $this->load->view('ImportandoXml', true);
-            $this->load->view('Index', Array('cuerpo' => $cuerpo));
             }
-        }
+        } 
+        $cuerpo = $this->load->view('ImportandoXml','', true);
+        //echo $cuerpo;
+        $this->load->view('Index', Array('cuerpo' => $cuerpo));
     }
     
-            }
+}

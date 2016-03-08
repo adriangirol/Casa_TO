@@ -126,7 +126,7 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <p><?php echo anchor('GenerarXml/exportar','Exportar Xml',Array("class"=>"btn btn-success"));?>
-                    <p><?php echo anchor('Entrada/importar','Importar Xml',Array("class"=>"btn btn-warning"));?>
+                    <?php echo anchor('Entrada/importar','Importar Xml',Array("class"=>"btn btn-warning"));?></p>
                 </div>
             </div>
         </div>

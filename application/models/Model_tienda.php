@@ -228,6 +228,7 @@ class model_tienda extends CI_Model{
      */
     public function AñadirProducto($producto){
         $this->db->insert('productos',$producto);
+        
     }
     public function ObtenerSiguienteIdProducto(){
         $q=$this->db->query("SELECT COUNT(*)as total FROM productos");
