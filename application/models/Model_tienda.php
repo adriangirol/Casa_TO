@@ -35,6 +35,14 @@ class model_tienda extends CI_Model{
      * @param type $categoria categoria de producto por donde buscar
      * @return array de productos de cada categoria.
      */
+    public function Productos($offset,$limit){
+         $query=$this->db->query('SELECT * FROM productos LIMIT '.$offset.','.$limit);
+         return $query->result_array();
+    }
+    public function Total_Productos(){
+        $query=$this->db->query('SELECT count(*)as total FROM productos;');
+         return $query->row()->total;
+    }
     public function traer_productos($condicion,$categoria){
         
         $query=$this->db->query('SELECT * FROM productos WHERE '. $condicion.'='.$categoria);
