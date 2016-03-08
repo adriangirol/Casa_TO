@@ -83,7 +83,7 @@
                     *
                    </span>
                   </label>
-                  <input class="form-control" id="CP" name="CP" type="text" value="<?php if($_SESSION['modificando']==true)
+                  <input class="form-control" id="CP" name="CP" type="text" min="5" max="5"value="<?php if($_SESSION['modificando']==true)
                   {
                     echo $_SESSION['usuario']['CP'];}?>"/>
                  </div>
@@ -94,7 +94,7 @@
                      *
                     </span>
                    </label>
-                   <input class="form-control" id="direccion" name="provincia" placeholder="C/ -N&ordm;" type="text" value="<?php if($_SESSION['modificando']==true)
+                   <input class="form-control" id="direccion" name="provincia" type="text" value="<?php if($_SESSION['modificando']==true)
                   {
                      echo $_SESSION['usuario']['Provincias'];}?>"/>
                  </div>

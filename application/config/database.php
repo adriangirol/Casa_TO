@@ -76,6 +76,28 @@ $query_builder = TRUE;
 //hostname=Localhost
 //username= 2daw1516_adrian
 //database=2daw1516_adrian01
+/*$db['default'] = array(
+	'dsn'	=> '',
+	'hostname' => 'iessansebastian.com',
+	'username' => '2daw1516_adrian',
+	'password' => 'olsian/73',
+	'database' => '2daw1516_adrian01',
+	'dbdriver' => 'mysqli',
+	'dbprefix' => '',
+	'pconnect' => FALSE,
+	'db_debug' => (ENVIRONMENT !== 'production'),
+	'cache_on' => FALSE,
+	'cachedir' => '',
+	'char_set' => 'utf8',
+	'dbcollat' => 'utf8_general_ci',
+	'swap_pre' => '',
+	'encrypt' => FALSE,
+	'compress' => FALSE,
+	'stricton' => FALSE,
+	'failover' => array(),
+	'save_queries' => TRUE
+);*/
+//Localhost
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',

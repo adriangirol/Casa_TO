@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-// PARA GERION PONER RUTA http://iessansebastian.com/...
+// PARA GERION PONER RUTA $config['base_url'] = 'http://iessansebastian.com/alumnos/2daw1516/adrian/Tienda_online'
 $config['base_url'] = 'http://localhost/Tienda_online/';
 
 /*
