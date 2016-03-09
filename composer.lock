@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/hanneskod/fpdf.git",
-                "reference": "48e7c0d89675c4ad61fd750437fb2bd904bda209"
+                "reference": "19c128e6154dbf7ab6aff11b5b1e1c128ab2a1b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hanneskod/fpdf/zipball/48e7c0d89675c4ad61fd750437fb2bd904bda209",
-                "reference": "48e7c0d89675c4ad61fd750437fb2bd904bda209",
+                "url": "https://api.github.com/repos/hanneskod/fpdf/zipball/19c128e6154dbf7ab6aff11b5b1e1c128ab2a1b7",
+                "reference": "19c128e6154dbf7ab6aff11b5b1e1c128ab2a1b7",
                 "shasum": ""
             },
             "require": {
@@ -36,7 +36,7 @@
             ],
             "description": "Unofficial PSR-0 compliant version of the FPDF library",
             "homepage": "http://www.fpdf.org/",
-            "time": "2015-05-19 18:34:58"
+            "time": "2016-03-02 20:44:38"
         },
         {
             "name": "setasign/fpdf",

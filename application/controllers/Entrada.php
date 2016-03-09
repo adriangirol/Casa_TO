@@ -285,8 +285,8 @@ class Entrada extends CI_Controller {
         if(!isset($SuperaSTOCK) || $SuperaSTOCK==false)
         {
             //Imprimimos el pedido en PDF;
-            $_SESSION['Fin_Compra']=true;
-            $this->ImprimirPedidoPDE($cod_pedido);
+            $comprando=true;
+            $this->ImprimirPedidoPDE($cod_pedido,$comprando);
             $this->carrito->destroy();//limpiamos la session para nueva compra.
            //Envio de correo con pdf
             $this->EnviaCorreo($cod_pedido,$_SESSION['usuario']['Correo']);
@@ -339,7 +339,7 @@ class Entrada extends CI_Controller {
      *  Imprimime pedidos en pdf
      * @param type $idpedido identificador del pedido para impresion
      */
-    public function ImprimirPedidoPDE($idpedido){
+    public function ImprimirPedidoPDE($idpedido,$comprando=false){
         $this->load->library('Pdf');
         $this->load->model('Model_tienda', "tienda");
         
@@ -352,7 +352,7 @@ class Entrada extends CI_Controller {
 //          echo "<pre>";
 //           print_r($pedidoCompleto);
 //          echo"</pre>";
-        $this->pdf->ImprimirPdf($pedidoCompleto);
+        $this->pdf->ImprimirPdf($pedidoCompleto,$comprando);
         
     }
     /**
