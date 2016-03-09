@@ -24,6 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 // PARA GERION PONER RUTA $config['base_url'] = 'http://iessansebastian.com/alumnos/2daw1516/adrian/Tienda_online'
+//$config['base_url'] = 'http://iessansebastian.com/alumnos/2daw1516/adrian/Tienda_online';
 $config['base_url'] = 'http://localhost/Tienda_online/';
 
 /*
